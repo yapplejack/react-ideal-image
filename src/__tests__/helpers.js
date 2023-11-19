@@ -118,7 +118,7 @@ describe('selectSrc', () => {
 
   it('Should throw if provided no supported formats in srcSet', () => {
     const props = {
-      srcSet: [{format: 'webp'}],
+      srcSet: [{ format: 'webp' }],
     }
     try {
       selectSrc(props)
@@ -131,7 +131,7 @@ describe('selectSrc', () => {
   })
 
   it('Should select the right source with an image greater than the max width', () => {
-    const srcThatShouldBeSelected = {format: 'jpeg', width: 100}
+    const srcThatShouldBeSelected = { format: 'jpeg', width: 100 }
     const props = {
       srcSet: [srcThatShouldBeSelected],
       maxImageWidth: 100,
@@ -142,8 +142,8 @@ describe('selectSrc', () => {
   })
 
   it('Should select the right source with an image less than the max width', () => {
-    const srcThatShouldBeSelected = {format: 'jpeg', width: 99}
-    const srcThatShouldNotBeSelected = {format: 'jpeg', width: 98}
+    const srcThatShouldBeSelected = { format: 'jpeg', width: 99 }
+    const srcThatShouldNotBeSelected = { format: 'jpeg', width: 98 }
     const props = {
       srcSet: [srcThatShouldBeSelected, srcThatShouldNotBeSelected],
       maxImageWidth: 100,
@@ -154,8 +154,8 @@ describe('selectSrc', () => {
   })
 
   it('Should use webp images if supported', () => {
-    const srcThatShouldBeSelected = {format: 'webp', width: 99}
-    const srcThatShouldNotBeSelected = {format: 'webp', width: 98}
+    const srcThatShouldBeSelected = { format: 'webp', width: 99 }
+    const srcThatShouldNotBeSelected = { format: 'webp', width: 98 }
     const props = {
       srcSet: [srcThatShouldBeSelected, srcThatShouldNotBeSelected],
       supportsWebp: true,
