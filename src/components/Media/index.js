@@ -1,9 +1,9 @@
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import compose from '../composeStyle'
-import {icons as defaultIcons} from '../constants'
+import { icons as defaultIcons } from '../constants'
 
-const {load, loading, loaded, error, noicon, offline} = defaultIcons
+const { load, loading, loaded, error, noicon, offline } = defaultIcons
 
 export default class Media extends PureComponent {
   static propTypes = {
@@ -63,7 +63,14 @@ export default class Media extends PureComponent {
     iconSize: 64,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { isMounted: false };
+  }
+
   componentDidMount() {
+    this.setState({ isMounted: true });
+
     if (this.props.onDimensions && this.dimensionElement)
       /* Firefox returns 0 for both clientWidth and clientHeight.
       To fix this we can check the parentNode's clientWidth and clientHeight as a fallback. */
@@ -78,16 +85,16 @@ export default class Media extends PureComponent {
   }
 
   renderIcon(props) {
-    const {icon, icons, iconColor: fill, iconSize: size, theme} = props
+    const { icon, icons, iconColor: fill, iconSize: size, theme } = props
     const iconToRender = icons[icon]
     if (!iconToRender) return null
     const styleOrClass = compose(
-      {width: size + 100, height: size, color: fill},
+      { width: size + 100, height: size, color: fill },
       theme.icon,
     )
     return React.createElement('div', styleOrClass, [
-      React.createElement(iconToRender, {fill, size, key: 'icon'}),
-      React.createElement('br', {key: 'br'}),
+      React.createElement(iconToRender, { fill, size, key: 'icon' }),
+      React.createElement('br', { key: 'br' }),
       this.props.message,
     ])
   }
@@ -112,7 +119,8 @@ export default class Media extends PureComponent {
   }
 
   renderNoscript(props) {
-    return props.ssr ? (
+    // render noscript in ssr + hydration to avoid hydration mismatch error
+    return this.state.isMounted ? null : (
       <noscript>
         <img
           {...compose(
@@ -126,12 +134,12 @@ export default class Media extends PureComponent {
           height={props.height}
         />
       </noscript>
-    ) : null
+    )
   }
 
   render() {
     const props = this.props
-    const {placeholder, theme} = props
+    const { placeholder, theme } = props
     let background
     if (props.icon === loaded) {
       background = {}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Waypoint from 'react-waypoint'
+import { Waypoint } from 'react-waypoint'
 import Media from '../Media'
 import { icons, loadStates } from '../constants'
 import { xhrLoader, imageLoader, timeout, combineCancel } from '../loaders'
@@ -129,7 +129,7 @@ export default class IdealImage extends Component {
         width: PropTypes.number.isRequired,
         src: PropTypes.string,
         size: PropTypes.number,
-        format: PropTypes.oneOf(['jpeg', 'webp']),
+        format: PropTypes.oneOf(['jpeg', 'jpg', 'webp', 'png', 'gif']),
       }),
     ).isRequired,
     /** function which decides if image should be downloaded */
@@ -162,7 +162,7 @@ export default class IdealImage extends Component {
     icons: PropTypes.object.isRequired,
     /** theme object - CSS Modules or React styles */
     theme: PropTypes.object.isRequired,
-    //** Automatically load when mounted */
+
     autoLoad: PropTypes.bool
   }
 
@@ -204,7 +204,7 @@ export default class IdealImage extends Component {
     }
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine })
     this.updateOnlineStatus()
-    console.log("loading");
+    console.log("tester")
     window.addEventListener('online', this.updateOnlineStatus)
     window.addEventListener('offline', this.updateOnlineStatus)
   }
@@ -324,8 +324,9 @@ export default class IdealImage extends Component {
       ...this.state, // eslint-disable-line react/no-access-state-in-setstate
       size: pickedSrc.size,
     })
-    this.setState({ pickedSrc, shouldAutoDownload, url })
-    if (shouldAutoDownload) this.load(false)
+    this.setState({ pickedSrc, shouldAutoDownload, url }, () => {
+      if (shouldAutoDownload) this.load(false)
+    })
   }
 
   onLeave = () => {
