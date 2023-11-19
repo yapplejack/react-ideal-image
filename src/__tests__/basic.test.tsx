@@ -1,8 +1,5 @@
-import * as React from 'react'
-import IdealImage from '../../'
-
-interface Props {}
-interface State {}
+type Props = {}
+type State = {}
 
 export default class Application extends React.Component<Props, State> {
   render() {
