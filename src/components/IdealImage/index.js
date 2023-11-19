@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Waypoint from 'react-waypoint'
 import Media from '../Media'
-import {icons, loadStates} from '../constants'
-import {xhrLoader, imageLoader, timeout, combineCancel} from '../loaders'
+import { icons, loadStates } from '../constants'
+import { xhrLoader, imageLoader, timeout, combineCancel } from '../loaders'
 import {
   guessMaxImageWidth,
   bytesToSize,
@@ -14,7 +14,7 @@ import {
   fallbackParams,
 } from '../helpers'
 
-const {initial, loading, loaded, error} = loadStates
+const { initial, loading, loaded, error } = loadStates
 
 const defaultShouldAutoDownload = ({
   connection,
@@ -24,7 +24,7 @@ const defaultShouldAutoDownload = ({
 }) => {
   if (possiblySlowNetwork) return false
   if (!connection) return true
-  const {downlink, rtt, effectiveType} = connection
+  const { downlink, rtt, effectiveType } = connection
   switch (effectiveType) {
     case 'slow-2g':
     case '2g':
@@ -49,8 +49,8 @@ const defaultGetMessage = (icon, state) => {
       return 'Loading...'
     case icons.load:
       // we can show `alt` here
-      const {pickedSrc} = state
-      const {size} = pickedSrc
+      const { pickedSrc } = state
+      const { size } = pickedSrc
       if (size) {
         return [
           'Click to load (',
@@ -63,7 +63,7 @@ const defaultGetMessage = (icon, state) => {
     case icons.offline:
       return 'Your browser is offline. Image not loaded'
     case icons.error:
-      const {loadInfo} = state
+      const { loadInfo } = state
       if (loadInfo === 404) {
         return '404. Image not found'
       } else {
@@ -75,7 +75,7 @@ const defaultGetMessage = (icon, state) => {
 }
 
 const defaultGetIcon = state => {
-  const {loadState, onLine, overThreshold, userTriggered} = state
+  const { loadState, onLine, overThreshold, userTriggered } = state
   if (ssr) return icons.noicon
   switch (loadState) {
     case loaded:
@@ -84,7 +84,7 @@ const defaultGetIcon = state => {
       return overThreshold ? icons.loading : icons.noicon
     case initial:
       if (onLine) {
-        const {shouldAutoDownload} = state
+        const { shouldAutoDownload } = state
         if (shouldAutoDownload === undefined) return icons.noicon
         return userTriggered || !shouldAutoDownload ? icons.load : icons.noicon
       } else {
@@ -105,10 +105,10 @@ export default class IdealImage extends Component {
       loadState: initial,
       connection: nativeConnection
         ? {
-            downlink: navigator.connection.downlink, // megabits per second
-            rtt: navigator.connection.rtt, // ms
-            effectiveType: navigator.connection.effectiveType, // 'slow-2g', '2g', '3g', or '4g'
-          }
+          downlink: navigator.connection.downlink, // megabits per second
+          rtt: navigator.connection.rtt, // ms
+          effectiveType: navigator.connection.effectiveType, // 'slow-2g', '2g', '3g', or '4g'
+        }
         : null,
       onLine: true,
       overThreshold: false,
@@ -162,6 +162,8 @@ export default class IdealImage extends Component {
     icons: PropTypes.object.isRequired,
     /** theme object - CSS Modules or React styles */
     theme: PropTypes.object.isRequired,
+    //** Automatically load when mounted */
+    autoLoad: PropTypes.bool
   }
 
   static defaultProps = {
@@ -169,6 +171,7 @@ export default class IdealImage extends Component {
     getMessage: defaultGetMessage,
     getIcon: defaultGetIcon,
     loader: 'xhr',
+    autoLoad: false,
   }
 
   componentDidMount() {
@@ -189,9 +192,9 @@ export default class IdealImage extends Component {
     } else if (this.props.threshold) {
       this.possiblySlowNetworkListener = e => {
         if (this.state.loadState !== initial) return
-        const {possiblySlowNetwork} = e.detail
+        const { possiblySlowNetwork } = e.detail
         if (!this.state.possiblySlowNetwork && possiblySlowNetwork) {
-          this.setState({possiblySlowNetwork})
+          this.setState({ possiblySlowNetwork })
         }
       }
       window.document.addEventListener(
@@ -199,8 +202,9 @@ export default class IdealImage extends Component {
         this.possiblySlowNetworkListener,
       )
     }
-    this.updateOnlineStatus = () => this.setState({onLine: navigator.onLine})
+    this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine })
     this.updateOnlineStatus()
+    console.log("loading");
     window.addEventListener('online', this.updateOnlineStatus)
     window.addEventListener('offline', this.updateOnlineStatus)
   }
@@ -223,7 +227,7 @@ export default class IdealImage extends Component {
   }
 
   onClick = () => {
-    const {loadState, onLine, overThreshold} = this.state
+    const { loadState, onLine, overThreshold } = this.state
     if (!onLine) return
     switch (loadState) {
       case loading:
@@ -264,11 +268,11 @@ export default class IdealImage extends Component {
   }
 
   load = userTriggered => {
-    const {loadState, url} = this.state
+    const { loadState, url } = this.state
     if (ssr || loaded === loadState || loading === loadState) return
     this.loadStateChange(loading, userTriggered)
 
-    const {threshold} = this.props
+    const { threshold } = this.props
     const loader =
       this.props.loader === 'xhr' ? xhrLoader(url) : imageLoader(url)
     loader
@@ -291,10 +295,10 @@ export default class IdealImage extends Component {
         if (!this.loader) return
         window.document.dispatchEvent(
           new CustomEvent('possiblySlowNetwork', {
-            detail: {possiblySlowNetwork: true},
+            detail: { possiblySlowNetwork: true },
           }),
         )
-        this.setState({overThreshold: true})
+        this.setState({ overThreshold: true })
         if (!this.state.userTriggered) this.cancel(true)
       })
       this.loader = combineCancel(loader, timeoutLoader)
@@ -305,7 +309,7 @@ export default class IdealImage extends Component {
 
   onEnter = () => {
     if (this.state.inViewport) return
-    this.setState({inViewport: true})
+    this.setState({ inViewport: true })
     const pickedSrc = selectSrc({
       srcSet: this.props.srcSet,
       maxImageWidth:
@@ -314,19 +318,19 @@ export default class IdealImage extends Component {
           : 0,
       supportsWebp,
     })
-    const {getUrl} = this.props
+    const { getUrl } = this.props
     const url = getUrl ? getUrl(pickedSrc) : pickedSrc.src
     const shouldAutoDownload = this.props.shouldAutoDownload({
       ...this.state, // eslint-disable-line react/no-access-state-in-setstate
       size: pickedSrc.size,
     })
-    this.setState({pickedSrc, shouldAutoDownload, url})
+    this.setState({ pickedSrc, shouldAutoDownload, url })
     if (shouldAutoDownload) this.load(false)
   }
 
   onLeave = () => {
     if (this.state.loadState === loading && !this.state.userTriggered) {
-      this.setState({inViewport: false})
+      this.setState({ inViewport: false })
       this.cancel(false)
     }
   }
@@ -342,7 +346,7 @@ export default class IdealImage extends Component {
           onClick={this.onClick}
           icon={icon}
           src={this.state.url || ''}
-          onDimensions={dimensions => this.setState({dimensions})}
+          onDimensions={dimensions => this.setState({ dimensions })}
           message={message}
         />
       </Waypoint>
