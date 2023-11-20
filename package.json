@@ -1,6 +1,6 @@
 {
   "name": "@yapplejack/react-ideal-image",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Adaptive image component",
   "main": "./dist/index.js",
   "typings": "index.d.ts",

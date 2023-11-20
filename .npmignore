@@ -1,0 +1,8 @@
+.tsbuildinfo*
+tsconfig*
+__tests__
+manistsconfig*
+.gitignore
+/src
+/node_modules
+package-lock*
