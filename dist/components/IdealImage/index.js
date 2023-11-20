@@ -275,8 +275,7 @@ var IdealImage = exports["default"] = /*#__PURE__*/function (_Component) {
         });
         var pickedSrc = (0, _helpers.selectSrc)({
           srcSet: this.props.srcSet,
-          maxImageWidth: this.props.srcSet.length > 1 ? (0, _helpers.guessMaxImageWidth)(this.state.dimensions) // eslint-disable-line react/no-access-state-in-setstate
-          : 0,
+          maxImageWidth: 1200,
           supportsWebp: _helpers.supportsWebp
         });
         var getUrl = this.props.getUrl;
