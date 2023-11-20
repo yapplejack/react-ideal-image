@@ -163,7 +163,7 @@ export default class IdealImage extends Component {
     /** theme object - CSS Modules or React styles */
     theme: PropTypes.object.isRequired,
 
-    autoLoad: PropTypes.bool
+    autoLoad: PropTypes.string
   }
 
   static defaultProps = {
@@ -171,7 +171,7 @@ export default class IdealImage extends Component {
     getMessage: defaultGetMessage,
     getIcon: defaultGetIcon,
     loader: 'xhr',
-    autoLoad: false,
+    autoLoad: "false",
   }
 
   componentDidMount() {
@@ -204,7 +204,7 @@ export default class IdealImage extends Component {
     }
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine })
     this.updateOnlineStatus()
-    if (this.props.autoLoad == true) {
+    if (this.props.autoLoad == "true") {
       console.log("Instaloaded for printing");
       this.setState({ inViewport: true })
       const pickedSrc = selectSrc({
@@ -350,7 +350,7 @@ export default class IdealImage extends Component {
   }
 
   onLeave = () => {
-    if (this.state.loadState === loading && !this.state.userTriggered && this.props.autoLoad == false) {
+    if (this.state.loadState === loading && !this.state.userTriggered && this.props.autoLoad == "false") {
       this.setState({ inViewport: false })
       this.cancel(false)
     }

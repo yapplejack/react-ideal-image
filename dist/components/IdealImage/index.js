@@ -208,7 +208,7 @@ var IdealImage = exports["default"] = /*#__PURE__*/function (_Component) {
       });
     });
     _defineProperty(_assertThisInitialized(_this), "onLeave", function () {
-      if (_this.state.loadState === loading && !_this.state.userTriggered && _this.props.autoLoad == false) {
+      if (_this.state.loadState === loading && !_this.state.userTriggered && _this.props.autoLoad == "false") {
         _this.setState({
           inViewport: false
         });
@@ -268,7 +268,7 @@ var IdealImage = exports["default"] = /*#__PURE__*/function (_Component) {
         });
       };
       this.updateOnlineStatus();
-      if (this.props.autoLoad == true) {
+      if (this.props.autoLoad == "true") {
         console.log("Instaloaded for printing");
         this.setState({
           inViewport: true
@@ -397,12 +397,12 @@ _defineProperty(IdealImage, "propTypes", {
   icons: _propTypes["default"].object.isRequired,
   /** theme object - CSS Modules or React styles */
   theme: _propTypes["default"].object.isRequired,
-  autoLoad: _propTypes["default"].bool
+  autoLoad: _propTypes["default"].string
 });
 _defineProperty(IdealImage, "defaultProps", {
   shouldAutoDownload: defaultShouldAutoDownload,
   getMessage: defaultGetMessage,
   getIcon: defaultGetIcon,
   loader: 'xhr',
-  autoLoad: false
+  autoLoad: "false"
 });
