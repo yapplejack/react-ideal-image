@@ -209,10 +209,7 @@ export default class IdealImage extends Component {
       this.setState({ inViewport: true })
       const pickedSrc = selectSrc({
         srcSet: this.props.srcSet,
-        maxImageWidth:
-          this.props.srcSet.length > 1
-            ? guessMaxImageWidth(this.state.dimensions) // eslint-disable-line react/no-access-state-in-setstate
-            : 0,
+        maxImageWidth: 1200,
         supportsWebp,
       })
       const { getUrl } = this.props
