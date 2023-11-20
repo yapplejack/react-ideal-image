@@ -1,8 +1,8 @@
 {
   "name": "@yapplejack/react-ideal-image",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Adaptive image component",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "typings": "index.d.ts",
   "engines": {
     "node": ">= 8.9.0",
@@ -23,7 +23,7 @@
     "deploy": "gh-pages -d styleguide"
   },
   "files": [
-    "/src"
+    "dist"
   ],
   "keywords": [],
   "author": "stereobooster <stereobooster@gmail.com>",
