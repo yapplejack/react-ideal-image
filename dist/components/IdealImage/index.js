@@ -208,7 +208,7 @@ var IdealImage = exports["default"] = /*#__PURE__*/function (_Component) {
       });
     });
     _defineProperty(_assertThisInitialized(_this), "onLeave", function () {
-      if (_this.state.loadState === loading && !_this.state.userTriggered) {
+      if (_this.state.loadState === loading && !_this.state.userTriggered && _this.props.autoLoad == false) {
         _this.setState({
           inViewport: false
         });
@@ -268,7 +268,31 @@ var IdealImage = exports["default"] = /*#__PURE__*/function (_Component) {
         });
       };
       this.updateOnlineStatus();
-      console.log("tester");
+      if (this.props.autoLoad == true) {
+        console.log("Instaloaded for printing");
+        this.setState({
+          inViewport: true
+        });
+        var pickedSrc = (0, _helpers.selectSrc)({
+          srcSet: this.props.srcSet,
+          maxImageWidth: this.props.srcSet.length > 1 ? (0, _helpers.guessMaxImageWidth)(this.state.dimensions) // eslint-disable-line react/no-access-state-in-setstate
+          : 0,
+          supportsWebp: _helpers.supportsWebp
+        });
+        var getUrl = this.props.getUrl;
+        var url = getUrl ? getUrl(pickedSrc) : pickedSrc.src;
+        var shouldAutoDownload = this.props.shouldAutoDownload(_objectSpread(_objectSpread({}, this.state), {}, {
+          // eslint-disable-line react/no-access-state-in-setstate
+          size: pickedSrc.size
+        }));
+        this.setState({
+          pickedSrc: pickedSrc,
+          shouldAutoDownload: shouldAutoDownload,
+          url: url
+        }, function () {
+          if (shouldAutoDownload) _this2.load(false);
+        });
+      }
       window.addEventListener('online', this.updateOnlineStatus);
       window.addEventListener('offline', this.updateOnlineStatus);
     }

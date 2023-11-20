@@ -204,7 +204,27 @@ export default class IdealImage extends Component {
     }
     this.updateOnlineStatus = () => this.setState({ onLine: navigator.onLine })
     this.updateOnlineStatus()
-    console.log("tester")
+    if (this.props.autoLoad == true) {
+      console.log("Instaloaded for printing");
+      this.setState({ inViewport: true })
+      const pickedSrc = selectSrc({
+        srcSet: this.props.srcSet,
+        maxImageWidth:
+          this.props.srcSet.length > 1
+            ? guessMaxImageWidth(this.state.dimensions) // eslint-disable-line react/no-access-state-in-setstate
+            : 0,
+        supportsWebp,
+      })
+      const { getUrl } = this.props
+      const url = getUrl ? getUrl(pickedSrc) : pickedSrc.src
+      const shouldAutoDownload = this.props.shouldAutoDownload({
+        ...this.state, // eslint-disable-line react/no-access-state-in-setstate
+        size: pickedSrc.size,
+      })
+      this.setState({ pickedSrc, shouldAutoDownload, url }, () => {
+        if (shouldAutoDownload) this.load(false)
+      })
+    }
     window.addEventListener('online', this.updateOnlineStatus)
     window.addEventListener('offline', this.updateOnlineStatus)
   }
@@ -330,7 +350,7 @@ export default class IdealImage extends Component {
   }
 
   onLeave = () => {
-    if (this.state.loadState === loading && !this.state.userTriggered) {
+    if (this.state.loadState === loading && !this.state.userTriggered && this.props.autoLoad == false) {
       this.setState({ inViewport: false })
       this.cancel(false)
     }
